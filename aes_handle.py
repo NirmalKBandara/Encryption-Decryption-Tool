@@ -23,9 +23,26 @@ def encrypt_file(file_path, key):
         plaintext = file.read()
 
     cipertext = aes_object.encrypt(nonce, plaintext, None)
-    encrypt_file_path = file_path + ".env"
+    encrypted_file_path = file_path + ".enc"
 
-    with open(encrypt_file_path, "wb") as file:
+    with open(encrypted_file_path, "wb") as file:
         file.write(nonce + cipertext)
 
     print(f"[+] Successfully encrypted '{file_path}' to '{encrypted_file_path}'")
+
+def decrypt_file(encrypted_file_path, key):
+    aes_object = AESGCM(key)
+
+    with open(encrypted_file_path, "rb") as file:
+        file_data = file.read()
+
+    nonce = file_data[:12]
+    cipertext = file_data[12:]
+
+    plaintext = aes_object.decrypt(nonce, cipertext, None)
+    decrypted_file_path = encrypted_file_path.replace(".enc", ".dec")
+
+    with open(decrypted_file_path, "wb") as file:
+        file.write(plaintext)
+
+    print(f"[+] Successfully decrypted '{encrypted_file_path}' to '{decrypted_file_path}'")

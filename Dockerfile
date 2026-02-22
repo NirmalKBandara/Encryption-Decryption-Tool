@@ -16,10 +16,11 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy your Python scripts
-COPY aes_handler.py .
+COPY aes_handle.py .
+COPY app.py .
 
 # Switch to the non-root user
 USER appuser
 
 # Set the default executable 
-ENTRYPOINT ["python", "aes_handler.py"]
+ENTRYPOINT ["python", "app.py"]
