@@ -62,5 +62,18 @@ def encrypt_data(data, public_key):
             label=None            
         )
     )
-    
+
     return cipertext
+
+def decrypt_data(encrypt_data, private_key):
+
+    plaintext = private_key.decrypt(
+        encrypt_data,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithem=hashes.SHA256()),
+            algorithem=hashes.SHA256(),
+            label=None
+        )
+    )
+
+    return plaintext
