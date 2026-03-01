@@ -32,3 +32,13 @@ def generate_keypair(private_key_path='private_key.pem', public_key_path='public
     print(f"[+] RSA Key pair generated: '{private_key_path}' and '{public_key_path}'")
     return private_key, public_key
 
+def load_private_key(private_key_path="private_key.pem"):
+    if not os.path.exists(private_key_path):
+        raise FileNotFoundError(f"[-] Private key not found at {private_key_path}")
+
+    with open(private_key_path, "rb") as file:
+        return serialization.load_pem_private_key(
+            file.read(),
+            password=None
+        )
+ 
