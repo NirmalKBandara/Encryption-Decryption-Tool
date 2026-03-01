@@ -17,6 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy your Python scripts
 COPY aes_handle.py .
+COPY rsa_handle.py .
 COPY app.py .
 
 # Switch to the non-root user
