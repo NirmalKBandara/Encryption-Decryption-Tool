@@ -16,8 +16,8 @@ def generate_keypair(private_key_path='private_key.pem', public_key_path='public
         file.write(
             private_key.private_bytes(
                 encoding=serialization.Encoding.PEM,
-                format=serialization.privateFormat.PKCS8,
-                encryption_algorithem=serialization.NoEncryption()
+                format=serialization.PrivateFormat.PKCS8,
+                encryption_algorithm=serialization.NoEncryption()
             )
         )
 
@@ -25,7 +25,7 @@ def generate_keypair(private_key_path='private_key.pem', public_key_path='public
         file.write(
             public_key.public_bytes(
                 encoding=serialization.Encoding.PEM,
-                format=serialization.publicFormat.SubjectPublicKeyInfo,
+                format=serialization.PublicFormat.SubjectPublicKeyInfo,
             )
         )
 
@@ -54,24 +54,24 @@ def encrypt_data(data, public_key):
     if isinstance(data, str):
         data = data.encode('utf-8')
 
-    cipertext = public_key.encrypt(
+    ciphertext = public_key.encrypt(
         data,
         padding.OAEP(
-            mgf=padding.MGF1(algorithem=hashes.SHA256()),
-            algorithem=hashes.SHA256(),
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
             label=None            
         )
     )
 
-    return cipertext
+    return ciphertext
 
-def decrypt_data(encrypt_data, private_key):
+def decrypt_data(encrypted_data, private_key):
 
     plaintext = private_key.decrypt(
-        encrypt_data,
+        encrypted_data,
         padding.OAEP(
-            mgf=padding.MGF1(algorithem=hashes.SHA256()),
-            algorithem=hashes.SHA256(),
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
             label=None
         )
     )
