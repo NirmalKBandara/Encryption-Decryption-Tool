@@ -90,26 +90,28 @@ def main():
                         print(f"[-] Error generating RSA keys: {e}")
                         
                 elif choice == '2':
-                    file_path = input("Enter path of the file to encrypt: ").strip()
-                    if not os.path.exists(file_path):
-                        print(f"[-] File not found: '{file_path}'")
-                        continue
-                        
+                    text = input("Enter text to encrypt: ").strip()
                     public_key_path = input("Enter path to the public key (default: public_key.pem): ").strip() or "public_key.pem"
+                    
                     if not os.path.exists(public_key_path):
                         print(f"[-] Public key file not found: '{public_key_path}'")
                         continue
                         
                     try:
                         public_key = rsa_handle.load_public_key(public_key_path)
-                        rsa_handle.encrypt_file(file_path, public_key)
+                        ciphertext = rsa_handle.encrypt_data(text, public_key)
+                        
+                        out_path = input("Enter path to save ciphertext (default: rsa_ciphertext.bin): ").strip() or "rsa_ciphertext.bin"
+                        with open(out_path, 'wb') as f:
+                            f.write(ciphertext)
+                        print(f"[+] Encrypted data saved to '{out_path}'")
                     except Exception as e:
                         print(f"[-] Encryption failed: {e}")
                         
                 elif choice == '3':
-                    file_path = input("Enter path of the file to decrypt: ").strip()
-                    if not os.path.exists(file_path):
-                        print(f"[-] File not found: '{file_path}'")
+                    in_path = input("Enter path of the ciphertext file to decrypt (default: rsa_ciphertext.bin): ").strip() or "rsa_ciphertext.bin"
+                    if not os.path.exists(in_path):
+                        print(f"[-] File not found: '{in_path}'")
                         continue
                         
                     private_key_path = input("Enter path to the private key (default: private_key.pem): ").strip() or "private_key.pem"
@@ -119,7 +121,10 @@ def main():
                         
                     try:
                         private_key = rsa_handle.load_private_key(private_key_path)
-                        rsa_handle.decrypt_file(file_path, private_key)
+                        with open(in_path, 'rb') as f:
+                            ciphertext = f.read()
+                        plaintext = rsa_handle.decrypt_data(ciphertext, private_key)
+                        print(f"[+] Decrypted text: {plaintext.decode('utf-8')}")
                     except Exception as e:
                         print(f"[-] Decryption failed. Did you use the wrong key/file? Error: {e}")
 
