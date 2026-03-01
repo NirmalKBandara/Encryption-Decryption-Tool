@@ -49,3 +49,18 @@ def load_public_key(public_key_path="public_key.pem"):
     with open(public_key_path, "rb") as file:
         return serialization.load_pem_public_key(file.read())
 
+def encrypt_data(data, public_key):
+
+    if isinstance(data, str):
+        data = data.encode('utf-8')
+
+    cipertext = public_key.encrypt(
+        data,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithem=hashes.SHA256()),
+            algorithem=hashes.SHA256(),
+            label=None            
+        )
+    )
+    
+    return cipertext
