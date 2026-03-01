@@ -42,3 +42,10 @@ def load_private_key(private_key_path="private_key.pem"):
             password=None
         )
  
+def load_public_key(public_key_path="public_key.pem"):
+    if not os.path.exists(public_key_path):
+        raise FileNotFoundError(f"[-] Public key not found at {public_key_path}")
+
+    with open(public_key_path, "rb") as file:
+        return serialization.load_pem_public_key(file.read())
+
