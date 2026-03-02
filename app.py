@@ -1,5 +1,6 @@
 import aes_handle
 import rsa_handle
+import hybrid_handle
 import os
 import sys
 
@@ -10,9 +11,10 @@ def main():
         print("\nAlgorithms:")
         print("1. AES (Advanced Encryption Standard)")
         print("2. RSA (Rivest-Shamir-Adleman)")
-        print("3. Exit")
+        print("3. Hybrid (RSA + AES)")
+        print("4. Exit")
         
-        algo_choice = input("Select an algorithm (1-3): ").strip()
+        algo_choice = input("Select an algorithm (1-4): ").strip()
         
         if algo_choice == '1':
             while True:
@@ -135,11 +137,58 @@ def main():
                     print("[-] Invalid choice. Please enter 1, 2, 3, or 4.")
 
         elif algo_choice == '3':
+            while True:
+                print("\nHybrid (RSA + AES) Options:")
+                print("1. Encrypt a file")
+                print("2. Decrypt a file")
+                print("3. Back to main menu")
+
+                choice = input("Select an option (1-3): ").strip()
+
+                if choice == '1':
+                    file_path = input("Enter path of the file to encrypt: ").strip()
+                    if not os.path.exists(file_path):
+                        print(f"[-] File not found: '{file_path}'")
+                        continue
+
+                    public_key_path = input("Enter path to the RSA public key (default: public_key.pem): ").strip() or "public_key.pem"
+                    if not os.path.exists(public_key_path):
+                        print(f"[-] Public key file not found: '{public_key_path}'")
+                        continue
+
+                    try:
+                        hybrid_handle.hybrid_encrypt(file_path, public_key_path)
+                    except Exception as e:
+                        print(f"[-] Hybrid encryption failed: {e}")
+
+                elif choice == '2':
+                    file_path = input("Enter path of the .henc file to decrypt: ").strip()
+                    if not os.path.exists(file_path):
+                        print(f"[-] File not found: '{file_path}'")
+                        continue
+
+                    private_key_path = input("Enter path to the RSA private key (default: private_key.pem): ").strip() or "private_key.pem"
+                    if not os.path.exists(private_key_path):
+                        print(f"[-] Private key file not found: '{private_key_path}'")
+                        continue
+
+                    try:
+                        hybrid_handle.hybrid_decrypt(file_path, private_key_path)
+                    except Exception as e:
+                        print(f"[-] Hybrid decryption failed. Wrong key or corrupted file? Error: {e}")
+
+                elif choice == '3':
+                    break
+
+                else:
+                    print("[-] Invalid choice. Please enter 1, 2, or 3.")
+
+        elif algo_choice == '4':
             print("Exiting tool...")
             sys.exit(0)
-            
+
         else:
-            print("[-] Invalid choice. Please enter 1, 2, or 3.")
+            print("[-] Invalid choice. Please enter 1, 2, 3, or 4.")
 
 if __name__ == "__main__":
     main()
