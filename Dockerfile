@@ -19,6 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy your Python scripts
 COPY --chown=appuser:appuser aes_handle.py .
 COPY --chown=appuser:appuser rsa_handle.py .
+COPY --chown=appuser:appuser hybrid_handle.py .
 COPY --chown=appuser:appuser app.py .
 
 # Switch to the non-root user
