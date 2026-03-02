@@ -99,7 +99,7 @@ def main():
                         
                     try:
                         public_key = rsa_handle.load_public_key(public_key_path)
-                        ciphertext = rsa_handle.encrypt_data(text, public_key)
+                        ciphertext = rsa_handle.encrypt_data(text.encode('utf-8'), public_key)
                         
                         out_path = input("Enter path to save ciphertext (default: rsa_ciphertext.bin): ").strip() or "rsa_ciphertext.bin"
                         with open(out_path, 'wb') as f:
